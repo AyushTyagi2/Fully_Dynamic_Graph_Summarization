@@ -16,16 +16,16 @@ export default function UploadDataset() {
   const [processingResult, setProcessingResult] = useState<any>(null);
   const [errorMessage, setErrorMessage] = useState("");
 
-  // Poligras configuration
+  // Prodigy configuration
   const [config, setConfig] = useState({
-    counts: 100,
-    group_size: 200,
-    hidden_size1: 64,
-    hidden_size2: 32,
-    lr: 0.001,
+    counts: 20,
+    group_size: 2000,
+    hidden_size1: 32,
+    hidden_size2: 16,
+    lr: 0.0005,
     dropout: 0.0,
     weight_decay: 0.0,
-    bad_counter: 0
+    bad_counter: 1
   });
 
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -130,7 +130,7 @@ export default function UploadDataset() {
       setIsUploading(false);
 
       sessionStorage.setItem("lastDatasetId", data.dataset_id);
-      setShowConfig(true); // Open config for Poligras run
+      setShowConfig(true); // Open config for Prodigy run
 
     } catch (error: any) {
       setErrorMessage(error.message || "Upload failed");
@@ -185,7 +185,7 @@ export default function UploadDataset() {
     }
   };
 
-  const handleRunPoligras = async () => {
+  const handleRunProdigy = async () => {
     if (!datasetId) return;
 
     setIsProcessing(true);
@@ -194,7 +194,7 @@ export default function UploadDataset() {
     setErrorMessage("");
 
     try {
-      const response = await fetch("http://localhost:8000/poligras", {
+      const response = await fetch("http://localhost:8000/Prodigy", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ dataset: datasetId, ...config }),
@@ -209,7 +209,7 @@ export default function UploadDataset() {
       setIsProcessing(false);
 
       sessionStorage.setItem("lastDatasetId", datasetId);
-      sessionStorage.setItem("poligrasSummary", JSON.stringify({
+      sessionStorage.setItem("ProdigySummary", JSON.stringify({
         dataset_id: datasetId,
         timestamp: new Date().toISOString(),
         has_result: true
@@ -265,7 +265,7 @@ export default function UploadDataset() {
     }
   };
 
-  // Navigate to visualization page. The backend will run Poligras on-demand
+  // Navigate to visualization page. The backend will run Prodigy on-demand
   // if output.json is missing (we added that behavior to the API).
   const handleVisualizeNow = () => {
     if (!datasetId) return;
@@ -295,7 +295,7 @@ export default function UploadDataset() {
         {/* Header */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-white mb-2">Dataset Upload & Processing</h1>
-          <p className="text-slate-400">Upload your datasets and run Poligras analysis</p>
+          <p className="text-slate-400">Upload your datasets and run Prodigy analysis</p>
         </div>
 
         {/* Main Card */}
@@ -321,28 +321,43 @@ export default function UploadDataset() {
 
           {/* RAW MODE: File/Folder Toggle */}
           {activeTab === "raw" && !datasetId && !isUploading && (
-            <div className="flex gap-2 mb-6">
-              <button
-                onClick={() => setUploadMode("file")}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${uploadMode === "file"
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-                  }`}
-              >
-                <File className="w-4 h-4 inline mr-2" />
-                Upload Files
-              </button>
-              <button
-                onClick={() => setUploadMode("folder")}
-                className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${uploadMode === "folder"
-                  ? "bg-blue-600 text-white"
-                  : "bg-slate-700 text-slate-300 hover:bg-slate-600"
-                  }`}
-              >
-                <Folder className="w-4 h-4 inline mr-2" />
-                Upload Folder
-              </button>
-            </div>
+            <>
+              <div className="flex gap-2 mb-6">
+                <button
+                  onClick={() => setUploadMode("file")}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${uploadMode === "file"
+                    ? "bg-blue-600 text-white"
+                    : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                    }`}
+                >
+                  <File className="w-4 h-4 inline mr-2" />
+                  Upload Files
+                </button>
+                <button
+                  onClick={() => setUploadMode("folder")}
+                  className={`flex-1 py-2 px-4 rounded-lg font-medium transition-all ${uploadMode === "folder"
+                    ? "bg-blue-600 text-white"
+                    : "bg-slate-700 text-slate-300 hover:bg-slate-600"
+                    }`}
+                >
+                  <Folder className="w-4 h-4 inline mr-2" />
+                  Upload Folder
+                </button>
+              </div>
+
+              {/* File Naming Requirements Info Box */}
+              <div className="mb-6 p-4 bg-blue-900/30 border border-blue-700/50 rounded-lg">
+                <div className="text-sm text-blue-300">
+                  <p className="font-semibold mb-2">📋 File Naming Requirements</p>
+                  <ul className="space-y-1 text-xs">
+                    <li>• Graph files must contain <span className="font-mono bg-slate-700 px-1.5 py-0.5 rounded">_graph</span> in filename</li>
+                    <li>• Feature files must contain <span className="font-mono bg-slate-700 px-1.5 py-0.5 rounded">_feat</span> in filename</li>
+                    <li>• <span className="font-semibold">Both files are required</span> for processing</li>
+                  </ul>
+                  <p className="mt-2 text-xs text-blue-400">Example: <span className="font-mono">my_graph</span> and <span className="font-mono">my_feat</span></p>
+                </div>
+              </div>
+            </>
           )}
 
           {/* Drop Zone */}
@@ -470,7 +485,7 @@ export default function UploadDataset() {
               <Loader2 className="w-5 h-5 text-blue-400 animate-spin flex-shrink-0" />
               <div>
                 <p className="text-blue-400 font-semibold">Processing dataset...</p>
-                <p className="text-sm text-slate-300">Running Poligras analysis. This may take a few minutes.</p>
+                <p className="text-sm text-slate-300">Running Prodigy analysis. This may take a few minutes.</p>
               </div>
             </div>
           )}
@@ -616,7 +631,7 @@ export default function UploadDataset() {
           <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
             <div className="bg-slate-800 rounded-2xl shadow-2xl border border-slate-700 p-8 max-w-md w-full max-h-[90vh] overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold text-white">Configure Poligras</h2>
+                <h2 className="text-2xl font-bold text-white">Configure Prodigy</h2>
                 <button
                   onClick={() => setShowConfig(false)}
                   className="text-slate-400 hover:text-white transition-colors"
@@ -667,7 +682,7 @@ export default function UploadDataset() {
 
               <div className="mt-8 flex gap-3">
                 <button
-                  onClick={handleRunPoligras}
+                  onClick={handleRunProdigy}
                   className="flex-1 py-3 px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 transition-all duration-300"
                 >
                   <span className="flex items-center justify-center space-x-2">

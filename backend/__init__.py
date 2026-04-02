@@ -1,1 +1,1 @@
-"""Backend package for the Poligras summarization runner."""
+"""Backend package for the Prodigy summarization runner."""

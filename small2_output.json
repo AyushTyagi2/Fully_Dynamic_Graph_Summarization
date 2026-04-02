@@ -1,7 +1,7 @@
 {
   "meta": {
     "dataset": "5cd26bb6-e4a5-4051-b46a-7bcce50ff44a",
-    "algorithm": "Poligras",
+    "algorithm": "Prodigy",
     "run_id": "2026-01-14T16:37:57Z",
     "parameters": {
       "counts": 100,

@@ -10,10 +10,10 @@ export default function Home() {
             <span className="text-white font-bold text-4xl">P</span>
           </div>
           <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-            Poligras
+            Prodigy
           </h1>
           <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
-            Interactive visualization for <span className="text-blue-400">Policy-based Graph Summarization</span>.
+            Interactive visualization for <span className="text-blue-400">Dynamic Graph Summarization</span>.
           </p>
         </div>
 
@@ -68,7 +68,7 @@ export default function Home() {
 
         {/* Footer */}
         <p className="text-sm text-slate-500 mt-12">
-          SIGMOD 2026 Demo • Built with Next.js + Sigma.js
+           Built with Next.js + Sigma.js
         </p>
       </main>
     </div>

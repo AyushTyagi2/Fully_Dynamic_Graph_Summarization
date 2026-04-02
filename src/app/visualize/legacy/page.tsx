@@ -5,8 +5,8 @@ import dynamic from "next/dynamic";
 import ControlPanel from "@/components/ControlPanel";
 import MetricsPanel from "@/components/MetricsPanel";
 import { MOCK_DATASETS, MOCK_STEPS_MAP } from "@/lib/mockData";
-import { convertPoligrasOutputToSteps } from "@/lib/poligrasConverter";
-import { PoligrasOutput, GraphStep } from "@/types";
+import { convertProdigyOutputToSteps } from "@/lib/ProdigyConverter";
+import { ProdigyOutput, GraphStep } from "@/types";
 
 const GraphCanvas = dynamic(() => import("@/components/GraphCanvas"), {
     ssr: false,
@@ -31,19 +31,19 @@ export default function VisualizationPage() {
     useEffect(() => {
         // Try to load real data from session storage if available
         const lastDatasetId = sessionStorage.getItem("lastDatasetId");
-        const poligrasOutput = sessionStorage.getItem("poligrasOutput");
+        const ProdigyOutput = sessionStorage.getItem("ProdigyOutput");
         
-        if (lastDatasetId && poligrasOutput) {
+        if (lastDatasetId && ProdigyOutput) {
             try {
-                const output: PoligrasOutput = JSON.parse(poligrasOutput);
-                const convertedSteps = convertPoligrasOutputToSteps(output);
+                const output: ProdigyOutput = JSON.parse(ProdigyOutput);
+                const convertedSteps = convertProdigyOutputToSteps(output);
                 if (convertedSteps.length > 0) {
                     setSteps(convertedSteps);
                     setSelectedDatasetId(lastDatasetId);
                     setCurrentStep(0);
                     setIsLoadingRealData(true);
                     // Clear from session storage to avoid reusing stale data
-                    sessionStorage.removeItem("poligrasOutput");
+                    sessionStorage.removeItem("ProdigyOutput");
                 }
             } catch (error) {
                 console.error("Failed to load real data:", error);
@@ -151,7 +151,7 @@ export default function VisualizationPage() {
                             </div>
                             <div>
                                 <h1 className="text-[17px] font-semibold text-[#f5f5f7] tracking-[-0.01em]">
-                                    Poligras
+                                    Prodigy
                                 </h1>
                                 <p className="text-[11px] text-[#86868b]">
                                     Graph Summarization

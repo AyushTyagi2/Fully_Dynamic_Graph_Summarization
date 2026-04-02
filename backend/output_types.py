@@ -1,4 +1,4 @@
-"""Typed protocol for structured Poligras outputs."""
+"""Typed protocol for structured Prodigy outputs."""
 
 from __future__ import annotations
 
@@ -144,12 +144,12 @@ class MergeStep(TypedDict):
     stats: MergeStepStats
 
 
-class PoligrasOutputBase(TypedDict):
+class ProdigyOutputBase(TypedDict):
     stats: Stats
     graphs: GraphCollection
 
 
-class PoligrasOutput(PoligrasOutputBase, total=False):
+class ProdigyOutput(ProdigyOutputBase, total=False):
     meta: Meta
     timeline: List[MergeStep]
     artifacts: SummaryArtifacts
@@ -168,7 +168,7 @@ __all__ = [
     "MergeStepStats",
     "Meta",
     "ParameterSet",
-    "PoligrasOutput",
+    "ProdigyOutput",
     "SummaryArtifacts",
     "Stats",
     "SummaryEdge",

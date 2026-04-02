@@ -13,7 +13,7 @@ import shutil
 from fastapi import BackgroundTasks
 import uuid
 
-from .run import run_poligras
+from .run import run_Prodigy
 from .dynamic_updates import apply_edge_updates, parse_update_stream, UpdateStreamError
 
 # Increase multipart limits for large folder uploads
@@ -38,14 +38,14 @@ ALLOWED_EXTS = (
 
 class PoligrasRequest(BaseModel):
     dataset: str = Field(..., description="Folder under backend/dataset")
-    counts: int = 100
-    group_size: int = 200
-    hidden_size1: int = 64
-    hidden_size2: int = 32
-    lr: float = 0.001
+    counts: int = 20
+    group_size: int = 2000
+    hidden_size1: int = 32
+    hidden_size2: int = 16
+    lr: float = 0.0005
     dropout: float = 0.0
     weight_decay: float = 0.0
-    bad_counter: int = 0
+    bad_counter: int = 1
 
 
 app = FastAPI(title="Poligras Service", version="1.0.0")
@@ -132,7 +132,7 @@ async def upload_multiple_files(
         raise HTTPException(500, f"Upload error: {str(e)}")
 
 
-@app.post("/poligras")
+@app.post("/Prodigy")
 def run_poligras_endpoint(payload: PoligrasRequest):
     try:
         dataset_dir = Path(__file__).parent / "dataset" / payload.dataset
@@ -140,8 +140,17 @@ def run_poligras_endpoint(payload: PoligrasRequest):
         if not dataset_dir.exists():
             raise HTTPException(404, f"Dataset '{payload.dataset}' not found")
         
+        # Check that required files exist
+        graph_path = dataset_dir / f"{payload.dataset}_graph"
+        feat_path = dataset_dir / f"{payload.dataset}_feat"
+        
+        if not graph_path.exists():
+            raise HTTPException(400, f"Graph file not found for dataset '{payload.dataset}'. Expected: {graph_path.name}")
+        if not feat_path.exists():
+            raise HTTPException(400, f"Feature file not found for dataset '{payload.dataset}'. Expected: {feat_path.name}")
+        
         args = SimpleNamespace(**payload.dict())
-        result = run_poligras(args)
+        result = run_Prodigy(args)
         
         if result is None:
             raise HTTPException(500, "Analysis completed but returned no results")
@@ -190,21 +199,21 @@ async def get_dataset_output(dataset_id: str):
             feat_path = dataset_dir / f"{dataset_id}_feat"
 
             if graph_path.exists():
-                # Build default args (matches defaults in run.parse_args)
+                # Build default args (matches defaults in PoligrasRequest)
                 args = SimpleNamespace(
                     dataset=dataset_id,
-                    counts=100,
-                    group_size=200,
-                    hidden_size1=64,
-                    hidden_size2=32,
-                    lr=0.001,
+                    counts=20,
+                    group_size=2000,
+                    hidden_size1=32,
+                    hidden_size2=16,
+                    lr=0.0005,
                     dropout=0.0,
                     weight_decay=0.0,
-                    bad_counter=0,
+                    bad_counter=1,
                 )
 
                 # Run Poligras synchronously and write output.json
-                result = run_poligras(args)
+                result = run_Prodigy(args)
                 if result is None:
                     raise HTTPException(500, "Poligras completed but returned no output")
 

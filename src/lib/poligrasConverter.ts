@@ -1,21 +1,21 @@
 /**
- * Converter: PoligrasOutput (spec format) → GraphStep[] (animation format)
+ * Converter: ProdigyOutput (spec format) → GraphStep[] (animation format)
  * 
- * This module bridges the standardized PoligrasOutput format (meta, stats, graphs)
+ * This module bridges the standardized ProdigyOutput format (meta, stats, graphs)
  * with the frontend's animation model (step-by-step visualization).
  * 
- * Since PoligrasOutput only contains initial and summary snapshots,
+ * Since ProdigyOutput only contains initial and summary snapshots,
  * we synthesize intermediate steps by simulating merges based on supernode sizes.
  */
 
-import { PoligrasOutput, GraphStep } from "@/types";
+import { ProdigyOutput, GraphStep } from "@/types";
 
 /**
- * Convert PoligrasOutput to animation steps for visualization
- * @param output - The standardized Poligras output
+ * Convert ProdigyOutput to animation steps for visualization
+ * @param output - The standardized Prodigy output
  * @returns Array of GraphStep objects for animation
  */
-export function convertPoligrasOutputToSteps(output: PoligrasOutput): GraphStep[] {
+export function convertProdigyOutputToSteps(output: ProdigyOutput): GraphStep[] {
     const initialGraph = output.graphs.initial;
     const summaryGraph = output.graphs.summary;
     const stats = output.stats;
@@ -178,8 +178,8 @@ function isNodeMerged(
  * Estimate reward for a step based on overall compression progress
  */
 function estimateStepReward(
-    initialGraph: PoligrasOutput["graphs"]["initial"],
-    summaryGraph: PoligrasOutput["graphs"]["summary"],
+    initialGraph: ProdigyOutput["graphs"]["initial"],
+    summaryGraph: ProdigyOutput["graphs"]["summary"],
     cumulativeSoFar: number,
     totalReward: number,
     currentStep: number,
@@ -195,8 +195,8 @@ function estimateStepReward(
  * Build edges for an intermediate step
  */
 function buildStepEdges(
-    initialEdges: PoligrasOutput["graphs"]["initial"]["edges"],
-    summaryEdges: PoligrasOutput["graphs"]["summary"]["edges"],
+    initialEdges: ProdigyOutput["graphs"]["initial"]["edges"],
+    summaryEdges: ProdigyOutput["graphs"]["summary"]["edges"],
     supernodeMembers: Map<string, number[]>,
     currentStep: number,
     sortedSupernodes: string[]
@@ -271,7 +271,7 @@ function isMerged(
  * Estimate correction edges for a step based on overall stats
  */
 function estimateCorrectionEdges(
-    stats: PoligrasOutput["stats"],
+    stats: ProdigyOutput["stats"],
     currentStep: number,
     totalSteps: number
 ): GraphStep["corrections"] {

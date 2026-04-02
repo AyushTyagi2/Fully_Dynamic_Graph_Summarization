@@ -1,6 +1,6 @@
 // Mock data for development/demo purposes - Extended version
 import {
-    PoligrasOutput,
+    ProdigyOutput,
     DatasetManifest,
     GraphStep,
 } from "@/types";
@@ -22,11 +22,11 @@ export const MOCK_DATASETS: DatasetManifest[] = [
     },
 ];
 
-// Mock PoligrasOutput matching the enhanced backend format
-export const MOCK_POLIGRAS_OUTPUT: PoligrasOutput = {
+// Mock ProdigyOutput matching the enhanced backend format
+export const MOCK_Prodigy_OUTPUT: ProdigyOutput = {
     meta: {
         dataset: "astro-ph",
-        algorithm: "Poligras",
+        algorithm: "Prodigy",
         run_id: "2025-01-12T10:32:41Z",
         parameters: {
             counts: 100,

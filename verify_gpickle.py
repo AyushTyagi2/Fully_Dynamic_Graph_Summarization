@@ -34,17 +34,17 @@ def verify_gpickle(file_path: str) -> None:
         format_type = "NetworkX Graph"
         
         if isinstance(data, dict) and 'G' in data:
-            # Poligras input format: {'G': NetworkX graph}
+            # Prodigy input format: {'G': NetworkX graph}
             graph = data['G']
-            format_type = "Poligras Input ({{G: graph}})"
+            format_type = "Prodigy Input ({{G: graph}})"
             print(f"\nDetected format: {format_type}")
             print(f"Dictionary keys: {list(data.keys())}")
         elif isinstance(data, dict) and 'superNodes_dict' in data:
-            # This is a Poligras summary dictionary, not a graph
+            # This is a Prodigy summary dictionary, not a graph
             print(f"\n{'='*60}")
-            print(f"Poligras Summary: {gpickle_path.name}")
+            print(f"Prodigy Summary: {gpickle_path.name}")
             print(f"{'='*60}")
-            print(f"Detected format: Poligras Summary Output")
+            print(f"Detected format: Prodigy Summary Output")
             print(f"Dictionary keys: {list(data.keys())}")
             print(f"\nSuperNodes: {len(data.get('superNodes_dict', {}))}")
             print(f"SuperEdges: {len(data.get('superEdge_list', []))}")

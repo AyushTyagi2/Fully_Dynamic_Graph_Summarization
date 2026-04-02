@@ -46,18 +46,27 @@ Efficiently updates superedges and maintains correction edges for perfect recons
 ### Dynamic Updates
 When edges are added or removed, the algorithm updates only the affected parts of the summary—**no full recomputation needed!**
 
-## 📦 Installation
+## Installation
 
 ```bash
 # Clone the repository
-git clone https://github.com/AyushTyagi2/sigmod26.git
-cd sigmod26
+git clone https://github.com/AyushTyagi2/Fully_Dynamic_Graph_Summarization.git
+cd Fully_Dynamic_Graph_Summarization
 
 # Install dependencies
 pip install -r requirements.txt
 ```
+## Execution
 
-## 🎮 Quick Start
+```bash
+#Execute the backend
+uvicorn backend.api:app --reload
+
+# Execute the Frontend(on the other terminal)
+npm run dev
+```
+
+## Quick Start
 
 ### Basic Usage
 
@@ -98,43 +107,31 @@ corrections.save("correction_edges.nx")
 4. **Update Dynamically**: Add/remove edges and see instant updates
 5. **Export**: Download your summary and correction edges
 
+### 📋 File Naming Requirements
+
+When uploading raw graph datasets, your files **must** contain specific keywords in their filenames for proper recognition:
+
+- **Graph files**: Must contain `_graph` in the filename (e.g., `my_graph`, `data_graph`, `network_graph.pkl`)
+- **Feature files**: Must contain `_feat` in the filename (e.g., `node_feat`, `features_feat`, `node_features_feat.pkl`)
+
+**Example valid filenames:**
+- `astro-ph_graph` (graph pickle file)
+- `astro-ph_feat` (feature pickle file)
+
+Both files are required for the summarization process to work. The upload handler will automatically rename them to `{dataset_id}_graph` and `{dataset_id}_feat` for processing.
+
 ## 🎛️ Hyperparameters
 
 | Parameter | Description | Default |
 |-----------|-------------|---------|
-| `counts` | Maximum iterations for summarization | 100 |
-| `group_size` | Maximum size of each node group | 50 |
-| `hidden_size` | Neural network hidden dimensions | 64 |
-| `lr` | Learning rate | 0.01 |
-| `dropout` | Dropout rate for regularization | 0.1 |
-| `weight_decay` | Weight decay for optimizer | 0.0001 |
-| `bad_counter` | Early stopping tolerance | 10 |
-
-## 📊 Performance
-
-Our method achieves:
-- **Near-constant time** edge updates
-- **Up to 90%** reduction in graph size
-- **Preserved structural properties** for downstream tasks
-- **Real-time processing** for streaming graphs
-
-## 🔬 Research
-
-This work is based on research presented at SIGMOD 2026. For technical details, please refer to our paper:
-
-**Fully Dynamic Graph Summarization**  
-Nitin Kumar, Ayush Tyagi, Harsh Rai, Parth Kulkarni, and Manish Kumar  
-*Indian Institute of Technology, Ropar*
-
-## 🤝 Contributing
-
-We welcome contributions! Whether it's:
-- 🐛 Bug reports
-- 💡 Feature requests
-- 📝 Documentation improvements
-- 🔧 Code contributions
-
-Please feel free to open an issue or submit a pull request.
+| `counts` | Maximum iterations for summarization | 20 |
+| `group_size` | Maximum size of each node group | 2000 |
+| `hidden_size1` | Neural network first hidden layer dimensions | 32 |
+| `hidden_size2` | Neural network second hidden layer dimensions | 16 |
+| `lr` | Learning rate | 0.0005 |
+| `dropout` | Dropout rate for regularization | 0.0 |
+| `weight_decay` | Weight decay for optimizer | 0.0 |
+| `bad_counter` | Early stopping tolerance (iterations with no improvement) | 1 |
 
 ## 📧 Contact
 
@@ -145,16 +142,6 @@ For questions, suggestions, or collaborations:
 - **Harsh Rai**: 2023csb1345@iitrpr.ac.in
 - **Parth Kulkarni**: 2023csb1142@iitrpr.ac.in
 - **Dr. Manish Kumar**: manishk@iitrpr.ac.in
-
-
-## 🙏 Acknowledgments
-
-- Built upon the PoliGraSS methodology by Bai & Zhao (2024)
-- Developed at the Indian Institute of Technology, Ropar
-- Thanks to the graph mining and neural network communities
-
 ---
 
 **⭐ If you find this tool useful, please star the repository!**
-
-Made with ❤️ at IIT Ropar

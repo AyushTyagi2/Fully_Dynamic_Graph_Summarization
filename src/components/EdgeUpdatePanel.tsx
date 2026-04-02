@@ -2,11 +2,11 @@
 
 import React, { useState, useRef, useCallback } from "react";
 import { Upload, CheckCircle, XCircle, Loader2, RefreshCw } from "lucide-react";
-import { PoligrasOutput } from "@/types";
+import { ProdigyOutput } from "@/types";
 
 interface EdgeUpdatePanelProps {
     datasetId: string;
-    onUpdateApplied: (updatedOutput: PoligrasOutput) => void;
+    onUpdateApplied: (updatedOutput: ProdigyOutput) => void;
 }
 
 export default function EdgeUpdatePanel({ datasetId, onUpdateApplied }: EdgeUpdatePanelProps) {
@@ -52,7 +52,7 @@ export default function EdgeUpdatePanel({ datasetId, onUpdateApplied }: EdgeUpda
                 throw new Error(errorData.detail || `Failed with status ${response.status}`);
             }
 
-            const updatedOutput: PoligrasOutput = await response.json();
+            const updatedOutput: ProdigyOutput = await response.json();
 
             const summarySnapshot = updatedOutput.graphs?.summary;
             setUpdateStats({

@@ -1,4 +1,4 @@
-// Type definitions for the Poligras visualization system.
+// Type definitions for the Prodigy visualization system.
 
 // ============================================
 // Backend Output Types (Enhanced Format)
@@ -83,7 +83,7 @@ export interface SummaryGraph {
     edges: SummaryEdge[];
 }
 
-export interface PoligrasOutput {
+export interface ProdigyOutput {
     meta?: Meta;
     stats: Stats;
     graphs: {

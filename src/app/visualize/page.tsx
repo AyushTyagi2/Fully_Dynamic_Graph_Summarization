@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import TimelineControls from "@/components/TimelineControls";
 import StepMetricsPanel from "@/components/StepMetricsPanel";
 import EdgeUpdatePanel from "@/components/EdgeUpdatePanel";
-import { PoligrasOutput, MergeAction, ActionStats } from "@/types";
+import { ProdigyOutput, MergeAction, ActionStats } from "@/types";
 
 // Dynamic import for Sigma (needs client-side only)
 const SigmaGraphCanvas = dynamic(() => import("@/components/SigmaGraphCanvas"), {
@@ -18,7 +18,7 @@ const SigmaGraphCanvas = dynamic(() => import("@/components/SigmaGraphCanvas"), 
 });
 
 export default function TimelineVisualizationPage() {
-    const [output, setOutput] = useState<PoligrasOutput | null>(null);
+    const [output, setOutput] = useState<ProdigyOutput | null>(null);
     const [actions, setActions] = useState<MergeAction[]>([]);
     const [currentStep, setCurrentStep] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
@@ -27,14 +27,14 @@ export default function TimelineVisualizationPage() {
     const [error, setError] = useState<string | null>(null);
     const [datasetId, setDatasetId] = useState<string | null>(null);
     const [graphKey, setGraphKey] = useState(0); // Key to force re-render of graph canvas
-    const [initialSummarySnapshot, setInitialSummarySnapshot] = useState<PoligrasOutput["graphs"]["summary"] | null>(null);
-    const [latestSummarySnapshot, setLatestSummarySnapshot] = useState<PoligrasOutput["graphs"]["summary"] | null>(null);
+    const [initialSummarySnapshot, setInitialSummarySnapshot] = useState<ProdigyOutput["graphs"]["summary"] | null>(null);
+    const [latestSummarySnapshot, setLatestSummarySnapshot] = useState<ProdigyOutput["graphs"]["summary"] | null>(null);
     const [hasAppliedUpdates, setHasAppliedUpdates] = useState(false);
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
     const readyForNextRef = useRef<boolean>(true);
     const readyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const syncSummarySnapshots = useCallback((summaryGraph?: PoligrasOutput["graphs"]["summary"], isInitialLoad = false) => {
+    const syncSummarySnapshots = useCallback((summaryGraph?: ProdigyOutput["graphs"]["summary"], isInitialLoad = false) => {
         if (!summaryGraph) return;
         setLatestSummarySnapshot(summaryGraph);
         // Only set initial snapshot on the first load, never update it after edge updates
@@ -64,7 +64,7 @@ export default function TimelineVisualizationPage() {
                         throw new Error(`Failed to fetch dataset output (${response.status})`);
                     }
 
-                    const apiData: PoligrasOutput = await response.json();
+                    const apiData: ProdigyOutput = await response.json();
                     if (!cancelled) {
                         setOutput(apiData);
                         if (apiData.timeline && apiData.timeline.length > 0) {
@@ -172,7 +172,7 @@ export default function TimelineVisualizationPage() {
     }, []);
 
     // Handle edge update applied - refresh the output with updated summary
-    const handleEdgeUpdateApplied = useCallback((updatedOutput: PoligrasOutput) => {
+    const handleEdgeUpdateApplied = useCallback((updatedOutput: ProdigyOutput) => {
         setOutput(updatedOutput);
         // Don't cache the updated output - we want to always start from original on reload
         setGraphKey((prev) => prev + 1);
@@ -413,10 +413,10 @@ export default function TimelineVisualizationPage() {
         }
     };
 
-    const superedgeCountFor = (snapshot?: PoligrasOutput["graphs"]["summary"]) =>
+    const superedgeCountFor = (snapshot?: ProdigyOutput["graphs"]["summary"]) =>
         snapshot?.edge_count ?? stats.summary.superedges;
 
-    const correctionCountFor = (snapshot?: PoligrasOutput["graphs"]["summary"]) =>
+    const correctionCountFor = (snapshot?: ProdigyOutput["graphs"]["summary"]) =>
         snapshot?.correction_edge_count ?? stats.summary.correction_edges;
 
 
@@ -456,7 +456,7 @@ export default function TimelineVisualizationPage() {
                     </div>
                     <div>
                         <h1 className="text-base font-bold text-white tracking-tight leading-tight">
-                            Poligras Timeline
+                            Prodigy Timeline
                         </h1>
                         <p className="text-[10px] text-blue-200/70 font-medium uppercase tracking-wider">
                             {output.meta?.dataset.slice(0, 12)}...

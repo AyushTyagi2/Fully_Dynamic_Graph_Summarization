@@ -2,12 +2,12 @@ import argparse
 import json
 from pathlib import Path
 
-from backend.model import PoligrasRunner
+from backend.model import ProdigyRunner
 
 
-def run_poligras(args):
-    """Train Poligras and serialize a structured summary payload."""
-    executer = PoligrasRunner(args)
+def run_Prodigy(args):
+    """Train Prodigy and serialize a structured summary payload."""
+    executer = ProdigyRunner(args)
     executer.fit()
     result = executer.encode()
 
@@ -18,27 +18,27 @@ def run_poligras(args):
     with output_path.open('w', encoding='utf-8') as outfile:
         json.dump(result, outfile, indent=2)
 
-    print(f"Poligras artifacts written to {output_path.resolve()}")
+    print(f"Prodigy artifacts written to {output_path.resolve()}")
     return result
 
 
 def parse_args():
-    parser = argparse.ArgumentParser(description="Run Poligras.")
+    parser = argparse.ArgumentParser(description="Run Prodigy.")
     parser.add_argument("--dataset", nargs="?", default="in-2004", help="Dataset name")
-    parser.add_argument("--counts", type=int, default=100)
-    parser.add_argument("--group_size", type=int, default=200)
-    parser.add_argument("--hidden_size1", type=int, default=64)
-    parser.add_argument("--hidden_size2", type=int, default=32)
-    parser.add_argument("--lr", type=float, default=0.001)
+    parser.add_argument("--counts", type=int, default=20)
+    parser.add_argument("--group_size", type=int, default=2000)
+    parser.add_argument("--hidden_size1", type=int, default=32)
+    parser.add_argument("--hidden_size2", type=int, default=16)
+    parser.add_argument("--lr", type=float, default=0.0005)
     parser.add_argument("--dropout", type=float, default=0.0)
     parser.add_argument("--weight-decay", type=float, default=0.0)
-    parser.add_argument("--bad_counter", type=int, default=0)
+    parser.add_argument("--bad_counter", type=int, default=1)
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
-    run_poligras(args)
+    run_Prodigy(args)
 
 
 if __name__ == "__main__":

@@ -27,7 +27,7 @@ export default function LoadingScreen({ stage, progress, message }: LoadingScree
           <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-b from-[#0077ed] to-[#0066cc] flex items-center justify-center shadow-xl">
             <span className="text-white font-bold text-3xl">P</span>
           </div>
-          <h1 className="text-3xl font-bold text-white mb-2">Poligras</h1>
+          <h1 className="text-3xl font-bold text-white mb-2">Prodigy</h1>
           <p className="text-slate-400">Loading your visualization...</p>
         </div>
 

@@ -9,7 +9,7 @@ from dataclasses import dataclass
 from itertools import combinations
 from typing import Dict, Iterable, List, Literal, Optional, Sequence, Set, Tuple
 
-from backend.output_types import PoligrasOutput, SummaryEdge
+from backend.output_types import ProdigyOutput, SummaryEdge
 
 PairKey = Tuple[str, str]
 EdgeKey = Tuple[str, str]
@@ -99,8 +99,8 @@ def parse_update_stream(raw_data: bytes | str) -> List[EdgeUpdate]:
     return updates
 
 
-def apply_edge_updates(summary_output: PoligrasOutput, updates: Sequence[EdgeUpdate]) -> PoligrasOutput:
-    """Apply a stream of updates to an existing Poligras summary payload."""
+def apply_edge_updates(summary_output: ProdigyOutput, updates: Sequence[EdgeUpdate]) -> ProdigyOutput:
+    """Apply a stream of updates to an existing Prodigy summary payload."""
 
     if not updates:
         return copy.deepcopy(summary_output)
@@ -114,7 +114,7 @@ def apply_edge_updates(summary_output: PoligrasOutput, updates: Sequence[EdgeUpd
 class _SummaryDynamicState:
     """Mutable helper that tracks summary state while applying updates."""
 
-    def __init__(self, payload: PoligrasOutput):
+    def __init__(self, payload: ProdigyOutput):
         artifacts = payload.get("artifacts")
         if not artifacts:
             raise UpdateStreamError("Summary payload is missing artifacts metadata. Regenerate the summary with an updated backend build.")
@@ -166,7 +166,7 @@ class _SummaryDynamicState:
         else:
             self._apply_removal(pair_key, edge_key, super_u, super_v)
 
-    def materialise(self) -> PoligrasOutput:
+    def materialise(self) -> ProdigyOutput:
         payload = self._base_payload
         summary_graph = payload["graphs"]["summary"]
         summary_graph["edges"] = self._build_summary_edges()
