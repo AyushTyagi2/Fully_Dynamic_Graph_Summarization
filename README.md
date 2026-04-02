@@ -47,9 +47,12 @@ Efficiently updates superedges and maintains correction edges for perfect recons
 When edges are added or removed, the algorithm updates only the affected parts of the summary—**no full recomputation needed!**
 
 ## Installation
+## Installation
 
 ```bash
 # Clone the repository
+git clone https://github.com/AyushTyagi2/Fully_Dynamic_Graph_Summarization.git
+cd Fully_Dynamic_Graph_Summarization
 git clone https://github.com/AyushTyagi2/Fully_Dynamic_Graph_Summarization.git
 cd Fully_Dynamic_Graph_Summarization
 
@@ -66,6 +69,7 @@ uvicorn backend.api:app --reload
 npm run dev
 ```
 
+## Quick Start
 ## Quick Start
 
 ### Basic Usage
